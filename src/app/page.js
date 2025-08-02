@@ -40,6 +40,9 @@ export default function Home() {
               <li>
                 Scoring: Results will be shown immediately after submission.
               </li>
+              <li>
+                Note: Going or pressing back at any moment will cause the quiz to exit.
+              </li>
             </ul>
           </div>
         </div>

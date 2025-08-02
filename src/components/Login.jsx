@@ -3,7 +3,10 @@
 import { IoMdPerson } from "react-icons/io";
 import { IoMdMail } from "react-icons/io";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 export default function Login() {
+  const route = useRouter()
   const [check, setCheck] = useState(0);
   const [userDetails,setUserDetails] = useState({
     name:"",
@@ -16,8 +19,13 @@ export default function Login() {
   }
   
   const handleSubmit = ()=>{
+    if(userDetails.name=="" || userDetails.email==""){
+        alert("please enter all the fields");
+        return;
+    }
     localStorage.setItem("name", JSON.stringify(userDetails.name));
     localStorage.setItem("email",JSON.stringify(userDetails.email));
+    route.push('/quiz')
   }
   return (
     <div className=" box border-2 border-black flex flex-col p-[30px] justify-center items-center space-y-4">
