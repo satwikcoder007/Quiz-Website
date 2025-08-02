@@ -2,8 +2,10 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Loader from "@/components/Loader";
+import { Card } from "@/components/Card";
 import { QuestionNavigator } from "@/components/QuestionNavigator";
 import useLocalStorage from "@/utils/useLocalStorage";
+
 export default function Page() {
   const [questionList, setQuestionList] = useLocalStorage(
     "questionList",
@@ -23,6 +25,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("fetching data")
         var totalData = await axios.get(
           "https://opentdb.com/api.php?amount=15"
         );
@@ -56,7 +59,7 @@ export default function Page() {
             })}
           </div>
           <div>
-
+            <Card/>
           </div>
         </>
       )}
