@@ -1,31 +1,64 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-
+import Loader from "@/components/Loader";
+import { QuestionNavigator } from "@/components/QuestionNavigator";
+import useLocalStorage from "@/utils/useLocalStorage";
 export default function Page() {
-  const [fetchFlag, setFetchFlag] = useState(0);
-  var data = [];
+  const [questionList, setQuestionList] = useLocalStorage(
+    "questionList",
+    () => {
+      return Array.from({ length: 15 }, (_, i) => ({
+        val: i + 1,
+        status: 0,
+      }));
+    }
+  );
+
+  const [fetchFlag, setFetchFlag] = useState(0); // Make sure useState is imported if not already.
+  const [currentQuestion, setCurrent] = useState(0);
+  const data = useRef(null);
+
+  // useEffect for API fetching (remains the same)
   useEffect(() => {
     const fetchData = async () => {
-      console.log("INside fetch Data");
-      var totalData = await axios.get("https://opentdb.com/api.php?amount=15");
-      data = totalData.data.results;
-      console.log(data);
-      setFetchFlag(1);
+      try {
+        var totalData = await axios.get(
+          "https://opentdb.com/api.php?amount=15"
+        );
+        data.current = totalData.data.results;
+        console.log("Fetched API Data");
+        setFetchFlag(1);
+      } catch (error) {
+        console.error("Error fetching API data:", error);
+      }
     };
-
     fetchData();
   }, []);
+
   return (
-    <div className="h-[calc(100vh-7vw)] flex flex-row justify-around items-center bg-white">
+    <div className="h-[calc(100vh-7vw)] flex flex-col justify-around items-center bg-white">
       {!fetchFlag ? (
-        <div>
-          <div className="w-32 aspect-square rounded-full relative flex justify-center items-center animate-[spin_3s_linear_infinite] z-40 bg-[conic-gradient(white_0deg,white_300deg,transparent_270deg,transparent_360deg)] before:animate-[spin_2s_linear_infinite] before:absolute before:w-[60%] before:aspect-square before:rounded-full before:z-[80] before:bg-[conic-gradient(white_0deg,white_270deg,transparent_180deg,transparent_360deg)] after:absolute after:w-3/4 after:aspect-square after:rounded-full after:z-[60] after:animate-[spin_3s_linear_infinite] after:bg-[conic-gradient(#065f46_0deg,#065f46_180deg,transparent_180deg,transparent_360deg)]">
-            <span className="absolute w-[85%] aspect-square rounded-full z-[60] animate-[spin_5s_linear_infinite] bg-[conic-gradient(#34d399_0deg,#34d399_180deg,transparent_180deg,transparent_360deg)]"></span>
-          </div>
-        </div>
+        <Loader />
       ) : (
-        <></>
+        <>
+          {/* section for question navigation */}
+          <div className=" flex  justify-center items-center space-x-3">
+            {questionList.map((data) => {
+              return (
+                <QuestionNavigator
+                  key={data.val}
+                  data={data}
+                  setQuestionList={setQuestionList}
+                  questionList={questionList}
+                />
+              );
+            })}
+          </div>
+          <div>
+
+          </div>
+        </>
       )}
     </div>
   );
