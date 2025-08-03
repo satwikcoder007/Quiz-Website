@@ -51,7 +51,7 @@ export default function Page() {
       ) : (
         <>
           {/* section for question navigation */}
-          <div className=" flex  justify-center items-center space-x-3">
+          <div className=" flex  justify-center items-center space-x-3 cursor-pointer">
             {questionList.map((data) => {
               return (
                 <QuestionNavigator
@@ -72,7 +72,7 @@ export default function Page() {
           </div>
           <div>
             <button 
-            className=" bg-green-700 text-white rounded-lg px-3 py-2"
+            className=" bg-green-700 text-white rounded-lg px-3 py-2 cursor-pointer hover:bg-black"
             onClick={()=>{route.push('/result')}}
             >
             Submit Test

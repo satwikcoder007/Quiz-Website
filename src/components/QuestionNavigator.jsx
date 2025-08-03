@@ -37,7 +37,7 @@ export const QuestionNavigator = (props) => {
 
   return (
     <div
-      className={`box text-[15px] font-semibold w-10 h-10 text-center flex items-center justify-center ${getClassByStatus()} hover:shadow-2xl hover:w-12 hover:h-12 transition-all duration-200`}
+      className={`box text-[15px]  font-semibold w-10 h-10 text-center flex items-center justify-center ${getClassByStatus()} hover:shadow-2xl hover:w-12 hover:h-12 transition-all duration-200`}
       onClick={() => {
         handleClick();
       }}

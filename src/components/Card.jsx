@@ -91,26 +91,26 @@ export default function Card(props) {
       <div className="flex space-x-4">
         <button
           onClick={() => handleButtons(1)}
-          className="bg-yellow-400 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+          className="bg-yellow-400 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px] cursor-pointer"
         >
           Mark For Review
         </button>
         <button
           onClick={() => handleButtons(2)}
-          className="bg-gray-600 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+          className="bg-gray-600 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px] cursor-pointer"
         >
           Skip
         </button>
         <button
           onClick={() => handleButtons(4)}
-          className="bg-blue-500 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+          className="bg-blue-500 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px] cursor-pointer"
         >
           Clear
         </button>
         <div className="w-[40px]"></div>
         <button
           onClick={() => handleButtons(3)}
-          className="bg-green-700 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+          className="bg-green-700 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px] cursor-pointer"
         >
           Save & Next
         </button>
