@@ -4,8 +4,11 @@ import { useState, useEffect ,useContext } from "react";
 import he from "he"
 import shuffleArray from "@/utils/shuffel";
 import { QuestionContext } from "@/context/QuestionContext";
+import { PreviousQuestionContext } from "@/context/PreviousQuestionContext";
 
 export default function Card(props) {
+
+  const {previousQuestion,setPreviousQuestion} = useContext(PreviousQuestionContext);
   
   const{currentQuestion,setCurrentQuestion} = useContext(QuestionContext)
   const [selectedOption, setSelectedOption] = useState("");
@@ -21,7 +24,7 @@ export default function Card(props) {
 
   const handleButtons = (val) => {
     const arr = [...props.questionList];
-
+    setPreviousQuestion((currentQuestion + 1) % 15);
     if (val == 1) {
       arr[currentQuestion].status = 2;
       arr[currentQuestion].response = selectedOption;

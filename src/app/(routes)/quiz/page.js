@@ -64,8 +64,6 @@ export default function Page() {
           <div>
             <Card
               question={data.current[currentQuestion]}
-              currentQuestion={currentQuestion}
-              setCurrentQuestion={setCurrentQuestion}
               setQuestionList={setQuestionList}
               questionList={questionList}
             />

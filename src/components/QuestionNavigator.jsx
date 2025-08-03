@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { QuestionContext } from "@/context/QuestionContext";
+import { PreviousQuestionContext } from "@/context/PreviousQuestionContext";
 
 export const QuestionNavigator = (props) => {
   const { currentQuestion, setCurrentQuestion } = useContext(QuestionContext);
+  const { previousQuestion, setPreviousQuestion } = useContext(
+    PreviousQuestionContext
+  )
   const getClassByStatus = () => {
     switch (props.data.status) {
       case 1:
@@ -18,7 +22,17 @@ export const QuestionNavigator = (props) => {
   };
 
   const handleClick = () => {
+    var arr = [...props.questionList];
+    if (
+      previousQuestion!=props.data.val-1 &&
+      previousQuestion!=-1 &&
+      arr[previousQuestion].response == "" &&
+      arr[previousQuestion].status != 2
+    ) arr[previousQuestion].status = 3;
+
+    props.setQuestionList(arr);
     setCurrentQuestion(props.data.val - 1);
+    setPreviousQuestion(props.data.val - 1);
   };
 
   return (
