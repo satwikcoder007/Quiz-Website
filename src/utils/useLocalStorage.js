@@ -12,7 +12,7 @@ function useLocalStorage(key, initialValue) {
      
       const item = window.localStorage.getItem(key);
 
-      return (item === 'undefined') ?initialValue()  : JSON.parse(item);
+      return (item === 'undefined' || item ==='null' || !item) ?initialValue()  : JSON.parse(item);
     } catch (error) {
      
       console.error("Error reading from localStorage:", error);

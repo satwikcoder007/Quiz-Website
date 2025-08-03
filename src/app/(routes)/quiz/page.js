@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import Loader from "@/components/Loader";
-import { Card } from "@/components/Card";
+import Card from "@/components/Card";
 import { QuestionNavigator } from "@/components/QuestionNavigator";
 import useLocalStorage from "@/utils/useLocalStorage";
+import { QuestionContext } from "@/context/QuestionContext";
 
 export default function Page() {
   const [questionList, setQuestionList] = useLocalStorage(
@@ -13,19 +14,21 @@ export default function Page() {
       return Array.from({ length: 15 }, (_, i) => ({
         val: i + 1,
         status: 0,
+        response:"",
       }));
     }
   );
 
   const [fetchFlag, setFetchFlag] = useState(0); // Make sure useState is imported if not already.
-  const [currentQuestion, setCurrent] = useState(0);
+  
+  const{currentQuestion,setCurrentQuestion} = useContext(QuestionContext)
   const data = useRef(null);
 
   // useEffect for API fetching (remains the same)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("fetching data")
+        console.log("fetching data");
         var totalData = await axios.get(
           "https://opentdb.com/api.php?amount=15"
         );
@@ -59,7 +62,13 @@ export default function Page() {
             })}
           </div>
           <div>
-            <Card/>
+            <Card
+              question={data.current[currentQuestion]}
+              currentQuestion={currentQuestion}
+              setCurrentQuestion={setCurrentQuestion}
+              setQuestionList={setQuestionList}
+              questionList={questionList}
+            />
           </div>
         </>
       )}
