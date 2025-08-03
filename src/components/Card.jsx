@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect ,useContext } from "react";
-import he from "he"
+import { useState, useEffect, useContext } from "react";
+import he from "he";
 import shuffleArray from "@/utils/shuffel";
 import { QuestionContext } from "@/context/QuestionContext";
 import { PreviousQuestionContext } from "@/context/PreviousQuestionContext";
 
 export default function Card(props) {
+  const { previousQuestion, setPreviousQuestion } = useContext(
+    PreviousQuestionContext
+  );
 
-  const {previousQuestion,setPreviousQuestion} = useContext(PreviousQuestionContext);
-  
-  const{currentQuestion,setCurrentQuestion} = useContext(QuestionContext)
+  const { currentQuestion, setCurrentQuestion } = useContext(QuestionContext);
   const [selectedOption, setSelectedOption] = useState("");
 
   useEffect(() => {
     setSelectedOption(props.questionList[currentQuestion].response || "");
-  }, [props.questionList,currentQuestion]);
-  
+  }, [props.questionList, currentQuestion]);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -30,30 +30,29 @@ export default function Card(props) {
       arr[currentQuestion].response = selectedOption;
       props.setQuestionList(arr);
       setCurrentQuestion((currentQuestion + 1) % 15);
-      setSelectedOption('');
+      setSelectedOption("");
     } else if (val == 2) {
       arr[currentQuestion].status = 3;
-      arr[currentQuestion].response = '';
+      arr[currentQuestion].response = "";
       props.setQuestionList(arr);
       setCurrentQuestion((currentQuestion + 1) % 15);
-      setSelectedOption('');
+      setSelectedOption("");
     } else if (val == 3) {
-      arr[currentQuestion].status = (selectedOption === '' ? 3 : 1);
+      arr[currentQuestion].status = selectedOption === "" ? 3 : 1;
       arr[currentQuestion].response = selectedOption;
       props.setQuestionList(arr);
       setCurrentQuestion((currentQuestion + 1) % 15);
-      setSelectedOption('');
+      setSelectedOption("");
     } else {
-      arr[currentQuestion].response = '';
+      arr[currentQuestion].response = "";
       props.setQuestionList(arr);
-      setSelectedOption('');
+      setSelectedOption("");
     }
   };
 
-  
   const options = [
     props.question.correct_answer,
-    ...props.question.incorrect_answers
+    ...props.question.incorrect_answers,
   ];
 
   return (
@@ -64,7 +63,7 @@ export default function Card(props) {
 
       <hr className="border-gray-200 mb-3" />
 
-      <div className="mb-6">
+      <div className="mb-6  max-w-[60vw] overflow-y-auto">
         <p className="text-[18px] text-gray-700 font-black">
           {he.decode(props.question.question)}
         </p>
@@ -72,7 +71,10 @@ export default function Card(props) {
 
       <div className="space-y-2 mb-4">
         {options.map((option) => (
-          <label key={option} className="flex items-center space-x-3 cursor-pointer text-[15px]">
+          <label
+            key={option}
+            className="flex items-center space-x-3 cursor-pointer text-[15px]"
+          >
             <input
               type="radio"
               name="quiz-option"
@@ -87,17 +89,29 @@ export default function Card(props) {
       </div>
 
       <div className="flex space-x-4">
-        <button onClick={() => handleButtons(1)} className="bg-yellow-400 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]">
+        <button
+          onClick={() => handleButtons(1)}
+          className="bg-yellow-400 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+        >
           Mark For Review
         </button>
-        <button onClick={() => handleButtons(2)} className="bg-gray-600 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]">
+        <button
+          onClick={() => handleButtons(2)}
+          className="bg-gray-600 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+        >
           Skip
         </button>
-        <button onClick={() => handleButtons(4)} className="bg-blue-500 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]">
+        <button
+          onClick={() => handleButtons(4)}
+          className="bg-blue-500 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+        >
           Clear
         </button>
         <div className="w-[40px]"></div>
-        <button onClick={() => handleButtons(3)} className="bg-green-700 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]">
+        <button
+          onClick={() => handleButtons(3)}
+          className="bg-green-700 hover:bg-black text-white py-2 px-4 rounded-lg transition duration-300 text-[13px]"
+        >
           Save & Next
         </button>
       </div>

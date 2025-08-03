@@ -6,8 +6,10 @@ import Card from "@/components/Card";
 import { QuestionNavigator } from "@/components/QuestionNavigator";
 import useLocalStorage from "@/utils/useLocalStorage";
 import { QuestionContext } from "@/context/QuestionContext";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  var route = useRouter()
   const [questionList, setQuestionList] = useLocalStorage(
     "questionList",
     () => {
@@ -67,6 +69,14 @@ export default function Page() {
               setQuestionList={setQuestionList}
               questionList={questionList}
             />
+          </div>
+          <div>
+            <button 
+            className=" bg-green-700 text-white rounded-lg px-3 py-2"
+            onClick={()=>{route.push('/result')}}
+            >
+            Submit Test
+            </button>
           </div>
         </>
       )}
