@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QuestionProvider } from "@/context/QuestionContext";
 import { PreviousQuestionProvider } from "@/context/PreviousQuestionContext";
+import { TestProvider } from "@/context/TestContext";
 
 export default function RootLayout({ children }) {
   return (
@@ -9,14 +10,16 @@ export default function RootLayout({ children }) {
       {/* Nav Bar  */}
       <QuestionProvider>
         <PreviousQuestionProvider>
-          <body className="h-screen w-screen ">
-            <div className="h-[7vw] w-screen bg-green-800 flex items-center pl-[5vw]">
-              <div className=" text-shadow-white font-black text-[30px]">
-                Quiz App
+          <TestProvider>
+            <body className="h-screen w-screen ">
+              <div className="h-[7vw] w-screen bg-green-800 flex items-center pl-[5vw]">
+                <div className=" text-shadow-white font-black text-[30px]">
+                  Quiz App
+                </div>
               </div>
-            </div>
-            {children}
-          </body>
+              {children}
+            </body>
+          </TestProvider>
         </PreviousQuestionProvider>
       </QuestionProvider>
     </html>

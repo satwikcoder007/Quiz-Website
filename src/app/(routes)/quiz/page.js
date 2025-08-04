@@ -6,6 +6,7 @@ import Card from "@/components/Card";
 import { QuestionNavigator } from "@/components/QuestionNavigator";
 import useLocalStorage from "@/utils/useLocalStorage";
 import { QuestionContext } from "@/context/QuestionContext";
+import { TestContext } from "@/context/TestContext";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -24,6 +25,7 @@ export default function Page() {
   const [fetchFlag, setFetchFlag] = useState(0); // Make sure useState is imported if not already.
   
   const{currentQuestion,setCurrentQuestion} = useContext(QuestionContext)
+  const{extractedQuestion} = useContext(TestContext)
   const data = useRef(null);
 
   // useEffect for API fetching (remains the same)
@@ -35,6 +37,7 @@ export default function Page() {
           "https://opentdb.com/api.php?amount=15"
         );
         data.current = totalData.data.results;
+        extractedQuestion.current = totalData.data.results;
         console.log("Fetched API Data");
         setFetchFlag(1);
       } catch (error) {
