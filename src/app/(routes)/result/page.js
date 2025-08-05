@@ -59,6 +59,14 @@ export default function Page() {
     (resultData.results.correctAnswers / resultData.results.totalQuestions) * 100
   );
 
+  if(typeof window === "undefined"){
+    
+  }
+  else{
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
+    localStorage.removeItem("questionList");
+  }
   return (
     <div className="bg-gray-50 min-h-screen font-sans p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
@@ -141,7 +149,7 @@ export default function Page() {
                     }`}
                   >
                     Your answer: {(resultData.questionList[i].response == "") ? "Not Answered" : resultData.questionList[i].response}
-                    {!resultData.questionList[i].isCorrect && ` | Correct: ${q.correct_answer}`}
+                    {!resultData.questionList[i].isCorrect && ` | Correct: ${he.decode(q.correct_answer)}`}
                   </p>
                 </div>
                 <ResultIcon isCorrect={resultData.questionList[i].isCorrect} />

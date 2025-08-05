@@ -63,7 +63,7 @@ export default function Card(props) {
 
       <hr className="border-gray-200 mb-3" />
 
-      <div className="mb-6  max-w-[60vw] overflow-y-auto">
+      <div className="mb-6  w-[60vw] overflow-y-auto">
         <p className="text-[18px] text-gray-700 font-black">
           {he.decode(props.question.question)}
         </p>

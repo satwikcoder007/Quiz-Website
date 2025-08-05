@@ -8,27 +8,30 @@ import useLocalStorage from "@/utils/useLocalStorage";
 import { QuestionContext } from "@/context/QuestionContext";
 import { TestContext } from "@/context/TestContext";
 import { useRouter } from "next/navigation";
+import Timer from "@/components/Timer";
 
 export default function Page() {
-  var route = useRouter()
+  const [time, setTime] = useState(5);
+  var route = useRouter();
   const [questionList, setQuestionList] = useLocalStorage(
     "questionList",
     () => {
       return Array.from({ length: 15 }, (_, i) => ({
         val: i + 1,
         status: 0,
-        response:"",
+        response: "",
       }));
     }
   );
 
   const [fetchFlag, setFetchFlag] = useState(0); // Make sure useState is imported if not already.
-  
-  const{currentQuestion,setCurrentQuestion} = useContext(QuestionContext)
-  const{extractedQuestion} = useContext(TestContext)
+
+  const { currentQuestion, setCurrentQuestion } = useContext(QuestionContext);
+  const { extractedQuestion } = useContext(TestContext);
   const data = useRef(null);
 
   // useEffect for API fetching (remains the same)
+  var interval;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,6 +48,22 @@ export default function Page() {
       }
     };
     fetchData();
+
+    const timer = () => {
+      const interval = setInterval(() => {
+        setTime((prevTime) => {
+          console.log(prevTime + " minutes left");
+          if (prevTime === 0) {
+            clearInterval(interval);
+            console.log("time over");
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 5000);
+    };
+
+    timer();
   }, []);
 
   return (
@@ -66,19 +85,22 @@ export default function Page() {
               );
             })}
           </div>
-          <div>
+          <div className=" flex items-center justify-center space-x-7">
             <Card
               question={data.current[currentQuestion]}
               setQuestionList={setQuestionList}
               questionList={questionList}
             />
+            <Timer initialMinutes={1}></Timer>
           </div>
           <div>
-            <button 
-            className=" bg-green-700 text-white rounded-lg px-3 py-2 cursor-pointer hover:bg-black"
-            onClick={()=>{route.push('/result')}}
+            <button
+              className=" bg-green-700 text-white rounded-lg px-3 py-2 cursor-pointer hover:bg-black"
+              onClick={() => {
+                route.push("/result");
+              }}
             >
-            Submit Test
+              Submit Test
             </button>
           </div>
         </>
