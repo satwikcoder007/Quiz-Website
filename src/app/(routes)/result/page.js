@@ -1,6 +1,4 @@
-
 "use client";
-
 import calculateResult from "@/utils/calculateResult";
 import { TestContext } from "@/context/TestContext";
 import { useContext } from "react";
