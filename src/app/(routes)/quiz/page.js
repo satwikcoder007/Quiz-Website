@@ -9,9 +9,10 @@ import { QuestionContext } from "@/context/QuestionContext";
 import { TestContext } from "@/context/TestContext";
 import { useRouter } from "next/navigation";
 import Timer from "@/components/Timer";
+import { AES } from "crypto-js";
+import CryptoJS from "crypto-js";
 
 export default function Page() {
-  const [time, setTime] = useState(5);
   var route = useRouter();
   const [questionList, setQuestionList] = useLocalStorage(
     "questionList",
@@ -31,17 +32,36 @@ export default function Page() {
   const data = useRef(null);
 
   // useEffect for API fetching (remains the same)
-  var interval;
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("fetching data");
-        var totalData = await axios.get(
-          "https://opentdb.com/api.php?amount=15"
-        );
-        data.current = totalData.data.results;
-        extractedQuestion.current = totalData.data.results;
-        console.log("Fetched API Data");
+        var flag = 0;
+        if (typeof window !== "undefined") {
+          let localData = localStorage.getItem("fetchedQuestion");
+          if (localData) {
+            let bytes = AES.decrypt(
+              localData,
+              process.env.NEXT_PUBLIC_SECRET_KEY
+            );
+            data.current = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            flag = 1;
+          }
+        }
+        if (!flag) {
+          var totalData = await axios.get(
+            "https://opentdb.com/api.php?amount=15"
+          );
+          data.current = totalData.data.results;
+        }
+        if (!flag && typeof window !== "undefined")
+          localStorage.setItem(
+            "fetchedQuestion",
+            AES.encrypt(
+              JSON.stringify(data.current),
+              process.env.NEXT_PUBLIC_SECRET_KEY
+            ).toString()
+          );
+        extractedQuestion.current = data.current;
         setFetchFlag(1);
       } catch (error) {
         console.error("Error fetching API data:", error);
@@ -49,21 +69,6 @@ export default function Page() {
     };
     fetchData();
 
-    const timer = () => {
-      const interval = setInterval(() => {
-        setTime((prevTime) => {
-          console.log(prevTime + " minutes left");
-          if (prevTime === 0) {
-            clearInterval(interval);
-            console.log("time over");
-            return 0;
-          }
-          return prevTime - 1;
-        });
-      }, 5000);
-    };
-
-    timer();
   }, []);
 
   return (
@@ -91,7 +96,7 @@ export default function Page() {
               setQuestionList={setQuestionList}
               questionList={questionList}
             />
-            <Timer initialMinutes={4}></Timer>
+            <Timer initialMinutes={4} />
           </div>
           <div>
             <button
