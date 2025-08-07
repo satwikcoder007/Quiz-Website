@@ -91,7 +91,7 @@ export default function Page() {
               setQuestionList={setQuestionList}
               questionList={questionList}
             />
-            <Timer initialMinutes={1}></Timer>
+            <Timer initialMinutes={4}></Timer>
           </div>
           <div>
             <button
