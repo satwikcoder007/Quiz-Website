@@ -44,36 +44,46 @@ const ResultIcon = ({ isCorrect }) => {
   );
 };
 
-
 export default function Page() {
-
-  const{extractedQuestion} = useContext(TestContext);
-  var questionList
-  if (typeof window === 'undefined') {
-      questionList = []; 
-  }
-  else  questionList = JSON.parse(localStorage.getItem("questionList"));
-  const resultData = calculateResult(extractedQuestion.current,questionList);
-  
-
-  const scorePercentage = Math.round(
-    (resultData.results.correctAnswers / resultData.results.totalQuestions) * 100
-  );
-
+  const { extractedQuestion } = useContext(TestContext);
   const route = useRouter();
-  const handleTryAgain = ()=>{
-    if(typeof window !== "undefined"){
+
+  const [resultData, setResultData] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedQuestions = localStorage.getItem("questionList");
+      if (storedQuestions && extractedQuestion?.current) {
+        const parsed = JSON.parse(storedQuestions);
+        const result = calculateResult(extractedQuestion.current, parsed);
+        setResultData(result);
+      }
+    }
+  }, [extractedQuestion]);
+
+  const handleTryAgain = () => {
+    if (typeof window !== "undefined") {
       cleanup1();
     }
     route.replace("/quiz");
-  }
+  };
 
-  const handleBackHome = ()=>{
-    if(typeof window !== "undefined"){
+  const handleBackHome = () => {
+    if (typeof window !== "undefined") {
       cleanup2();
     }
     route.replace("/");
+  };
+
+  if (!resultData) {
+    return <div className="text-center mt-10">Loading Results...</div>;
   }
+
+  const scorePercentage = Math.round(
+    (resultData.results.correctAnswers / resultData.results.totalQuestions) *
+      100
+  );
+
   return (
     <div className="bg-gray-50 min-h-screen font-sans p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
@@ -121,15 +131,21 @@ export default function Page() {
           {/* Stats Breakdown */}
           <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-center sm:text-left">
             <div className="bg-green-100 text-green-800 p-4 rounded-lg w-36">
-              <p className="text-3xl font-bold">{resultData.results.correctAnswers}</p>
+              <p className="text-3xl font-bold">
+                {resultData.results.correctAnswers}
+              </p>
               <p>Correct</p>
             </div>
             <div className="bg-red-100 text-red-800 p-4 rounded-lg w-36">
-              <p className="text-3xl font-bold">{resultData.results.incorrectAnswers}</p>
+              <p className="text-3xl font-bold">
+                {resultData.results.incorrectAnswers}
+              </p>
               <p>Incorrect</p>
             </div>
             <div className="bg-gray-100 text-gray-800 p-4 rounded-lg w-36">
-              <p className="text-3xl font-bold">{resultData.results.unanswered}</p>
+              <p className="text-3xl font-bold">
+                {resultData.results.unanswered}
+              </p>
               <p>Unanswered</p>
             </div>
           </div>
@@ -141,22 +157,28 @@ export default function Page() {
             Review Your Answers
           </h2>
           <div className="space-y-4">
-            {extractedQuestion.current.map((q,i) => (
+            {extractedQuestion.current.map((q, i) => (
               <div
                 key={i}
                 className="border border-gray-200 p-4 rounded-lg flex items-center justify-between"
               >
                 <div>
                   <p className="font-semibold text-gray-700">
-                    {i+1}. {he.decode(q.question)}
+                    {i + 1}. {he.decode(q.question)}
                   </p>
                   <p
                     className={`text-sm ${
-                      resultData.questionList[i].isCorrect ? "text-green-600" : "text-red-600"
+                      resultData.questionList[i].isCorrect
+                        ? "text-green-600"
+                        : "text-red-600"
                     }`}
                   >
-                    Your answer: {(resultData.questionList[i].response == "") ? "Not Answered" : resultData.questionList[i].response}
-                    {!resultData.questionList[i].isCorrect && ` | Correct: ${he.decode(q.correct_answer)}`}
+                    Your answer:{" "}
+                    {resultData.questionList[i].response == ""
+                      ? "Not Answered"
+                      : resultData.questionList[i].response}
+                    {!resultData.questionList[i].isCorrect &&
+                      ` | Correct: ${he.decode(q.correct_answer)}`}
                   </p>
                 </div>
                 <ResultIcon isCorrect={resultData.questionList[i].isCorrect} />
@@ -167,10 +189,20 @@ export default function Page() {
 
         {/* Action Buttons */}
         <div className="mt-8 flex justify-center gap-4">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md" onClick={()=>{handleTryAgain()}}>
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md"
+            onClick={() => {
+              handleTryAgain();
+            }}
+          >
             Try Again
           </button>
-          <button className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md" onClick={()=>{handleBackHome()}}>
+          <button
+            className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md"
+            onClick={() => {
+              handleBackHome();
+            }}
+          >
             Back to Home
           </button>
         </div>
