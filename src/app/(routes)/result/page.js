@@ -1,7 +1,7 @@
 "use client";
 import calculateResult from "@/utils/calculateResult";
 import { TestContext } from "@/context/TestContext";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import he from "he";
 import { useRouter } from "next/navigation";
 import cleanup1 from "@/utils/cleanup1";
