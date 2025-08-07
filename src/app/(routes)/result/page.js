@@ -5,6 +5,9 @@ import calculateResult from "@/utils/calculateResult";
 import { TestContext } from "@/context/TestContext";
 import { useContext } from "react";
 import he from "he";
+import { useRouter } from "next/navigation";
+import cleanup1 from "@/utils/cleanup1";
+import cleanup2 from "@/utils/cleanup2";
 
 const ResultIcon = ({ isCorrect }) => {
   if (isCorrect) {
@@ -59,13 +62,19 @@ export default function Page() {
     (resultData.results.correctAnswers / resultData.results.totalQuestions) * 100
   );
 
-  if(typeof window === "undefined"){
-    
+  const route = useRouter();
+  const handleTryAgain = ()=>{
+    if(typeof window !== "undefined"){
+      cleanup1();
+    }
+    route.replace("/quiz");
   }
-  else{
-    localStorage.removeItem("email");
-    localStorage.removeItem("name");
-    localStorage.removeItem("questionList");
+
+  const handleBackHome = ()=>{
+    if(typeof window !== "undefined"){
+      cleanup2();
+    }
+    route.replace("/");
   }
   return (
     <div className="bg-gray-50 min-h-screen font-sans p-4 sm:p-6 lg:p-8">
@@ -160,10 +169,10 @@ export default function Page() {
 
         {/* Action Buttons */}
         <div className="mt-8 flex justify-center gap-4">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md" onClick={()=>{handleTryAgain()}}>
             Try Again
           </button>
-          <button className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+          <button className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md" onClick={()=>{handleBackHome()}}>
             Back to Home
           </button>
         </div>
