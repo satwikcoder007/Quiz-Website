@@ -10,7 +10,7 @@ export default function HomeWrapper() {
   const route = useRouter();
   const path = usePathname();
   const [flag, setFlag] = useState(0);
-  console.log(path);
+  console.log("inside homw wrapper "+path);
   useEffect(() => {
     if (path == "/") {
       if (typeof window !== "undefined") {

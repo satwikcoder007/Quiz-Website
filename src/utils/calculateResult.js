@@ -1,6 +1,4 @@
 const calculateResult = (extractedQuestion, questionList) => {
-
-    console.log(extractedQuestion)
   const results = {
     totalQuestions: extractedQuestion.length,
     correctAnswers: 0,
